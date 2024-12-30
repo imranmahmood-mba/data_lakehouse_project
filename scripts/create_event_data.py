@@ -1,6 +1,6 @@
 """Module providing function to write list of dictionary to JSON"""
 import json
-from create_user import User
+from scripts.create_user import User
 
 NUM_OF_EVENTS = 1000
 FILE_NAME = "imdb_event_data.json"
