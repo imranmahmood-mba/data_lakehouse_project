@@ -1,3 +1,4 @@
+"""Provides modules to create randomness in user design """
 from random import randint, choice
 import datetime
 import time
@@ -8,7 +9,7 @@ class User:
     Represents a user with an ID, action, and event timestamp.
     """
     def __init__(self, user_id: int, user_action: str,
-                event_time: datetime.datetime):
+                 event_time: datetime.datetime, movie_id: int):
         """
         Basic constructor for the User class.
 
@@ -20,10 +21,13 @@ class User:
         self.user_id = user_id
         self.user_action = user_action
         self.event_time = event_time
+        self.movie_id = movie_id
 
     @staticmethod
-    def create_random_user(start_id=100000000, end_id=999999999,
-                           actions=None, start_year=2010, end_year=2025):
+    def create_random_user(user_start_id=100000000, user_end_id=999999999,
+                           movie_start_id=1, movie_end_id=1000,
+                           actions=None, start_year=2010, end_year=2025,
+                           ):
         """
         Factory method to create a random user with default parameters.
 
@@ -37,14 +41,19 @@ class User:
         Returns:
             User: object contains the randomly generated user data
         """
-        actions = actions or ['signed up', 'started film', 'finished film']
-        user_id = randint(start_id, end_id)
+        actions = actions or ['watched trailer', 'started film',
+                              'finished film']
+        user_id = randint(user_start_id, user_end_id)
+        movie_id = randint(movie_start_id, movie_end_id)
         user_action = choice(actions)
-        start_timestamp = int(time.mktime(datetime.date(start_year, 1, 1).timetuple()))
-        end_timestamp = int(time.mktime(datetime.date(end_year, 12, 31).timetuple()))
+        start_timestamp = int(time.mktime(datetime.date(
+            start_year, 1, 1).timetuple()))
+        end_timestamp = int(time.mktime(datetime.date(
+            end_year, 12, 31).timetuple()))
         random_timestamp = randint(start_timestamp, end_timestamp)
-        event_time = datetime.datetime.fromtimestamp(random_timestamp)
-        return User(user_id, user_action, event_time)
+        event_time = datetime.datetime.fromtimestamp(
+            random_timestamp).isoformat()
+        return User(user_id, user_action, event_time, movie_id)
 
     def to_dict(self):
         """Saves user data to a dictionary
@@ -56,5 +65,6 @@ class User:
         return {
             'user_id': self.user_id,
             'user_action': self.user_action,
-            'event_time': self.event_time
+            'event_time': self.event_time,
+            'movie_id': self.movie_id
         }
